@@ -1,0 +1,11 @@
+[package]
+name = "aoc-2025-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+seq-macro = "0.3.5"
+io_tee = "0.1.1"
+regex = "1.11.1"
+kust = "0.0.2"
+fix_fn = "1.0.2"
