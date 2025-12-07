@@ -18,4 +18,4 @@ macro_rules! days {
     };
 }
 
-days!(6);
+days!(7);
