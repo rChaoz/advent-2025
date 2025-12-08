@@ -4,11 +4,11 @@ use crate::{Context, DayInfo, debug_example};
 use PointParseError::*;
 use kust::ScopeFunctions;
 use std::collections::HashMap;
-use std::error::Error;
 use std::fmt::{Display, Formatter};
 use std::hash::{Hash, Hasher};
 use std::num::ParseIntError;
 use std::str::FromStr;
+use thiserror::Error;
 
 pub const INFO: DayInfo = DayInfo {
     name: "Playground",
@@ -54,17 +54,20 @@ impl FromStr for Point {
 
     /// Parses a point from a string of shape "x,y,z", where x, y and z are integers (i32 bounds).
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        fn next_coord(coord: Option<&str>, count: usize) -> Result<i32, PointParseError> {
-            coord
-                .ok_or(InvalidCoordsCount(count))?
+        fn next_coord<'a>(
+            it: &mut impl Iterator<Item = &'a str>,
+            index: usize,
+        ) -> Result<i32, PointParseError> {
+            it.next()
+                .ok_or(InvalidCoordsCount(index))?
                 .parse()
-                .map_err(|int_err| PointParseIntError(count + 1, int_err))
+                .map_err(|int_err| PointParseIntError(index, int_err))
         }
 
         let mut it = s.split(',');
-        let x = next_coord(it.next(), 0)?;
-        let y = next_coord(it.next(), 1)?;
-        let z = next_coord(it.next(), 2)?;
+        let x = next_coord(&mut it, 0)?;
+        let y = next_coord(&mut it, 1)?;
+        let z = next_coord(&mut it, 2)?;
 
         match it.next() {
             None => Ok(Self { x, y, z }),
@@ -73,37 +76,14 @@ impl FromStr for Point {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
 enum PointParseError {
     /// Failed to parse the string segments with the specified index (as split by ',') into an integer
-    PointParseIntError(usize, ParseIntError),
+    #[error("could not parse string segment with index {0}")]
+    PointParseIntError(usize, #[source] ParseIntError),
     /// String has invalid amount of segments (less or more than 3)
+    #[error("string has invalid amount of coords: {0}, should have 3")]
     InvalidCoordsCount(usize),
-}
-
-impl Display for PointParseError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            PointParseIntError(index, _) => {
-                write!(f, "could not parse string segment with index {index}")
-            }
-            InvalidCoordsCount(count) => {
-                write!(
-                    f,
-                    "string has invalid amount of coords: {count}, should have 3"
-                )
-            }
-        }
-    }
-}
-
-impl Error for PointParseError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        match self {
-            PointParseIntError(_, err) => Some(err),
-            InvalidCoordsCount(_) => None,
-        }
-    }
 }
 
 /// A segment is defined by two points; the order of the points does not matter
@@ -126,7 +106,7 @@ impl Display for Segment {
 
 impl PartialEq for Segment {
     fn eq(&self, other: &Self) -> bool {
-        (self.0 == other.0 && self.0 == other.0) || (self.0 == other.0 && self.0 == other.0)
+        (self.0 == other.0 && self.1 == other.1) || (self.0 == other.1 && self.1 == other.0)
     }
 }
 
@@ -151,6 +131,7 @@ fn run(context: &mut Context) {
         .lines()
         .map(Point::from_str)
         .collect::<Result<Vec<_>, _>>()
+        .map_err(|err| err.to_string())
         .unwrap();
     let initial_connections_count = if context.run_type == Examples {
         10
