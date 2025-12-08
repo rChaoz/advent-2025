@@ -1,5 +1,5 @@
 use crate::RunType::Examples;
-use crate::{debug_example, Context, DayInfo};
+use crate::{Context, DayInfo, debug_example};
 use std::ops::Add;
 
 pub const INFO: DayInfo = DayInfo {
@@ -42,7 +42,11 @@ fn is_invalid_id_part2(id: u64) -> bool {
     false
 }
 
-fn calc_sum<'a, R, F>(context: &Context, ids: R, product_id_check: F) -> u64
+fn calc_sum<'a, R, F>(
+    #[allow(unused_variables)] context: &Context,
+    ids: R,
+    product_id_check: F,
+) -> u64
 where
     R: Iterator<Item = u64>,
     F: Fn(u64) -> bool,

@@ -1,4 +1,4 @@
-use crate::{debug_example, Context, DayInfo};
+use crate::{Context, DayInfo, debug_example};
 
 pub const INFO: DayInfo = DayInfo {
     name: "Lobby",
@@ -43,7 +43,11 @@ fn max_joltage2(bank: Bank) -> u64 {
     joltage
 }
 
-fn calc_total_joltage<T, F>(context: &Context, banks: T, get_max_joltage: F) -> u64
+fn calc_total_joltage<T, F>(
+    #[allow(unused_variables)] context: &Context,
+    banks: T,
+    get_max_joltage: F,
+) -> u64
 where
     T: Iterator<Item = Bank>,
     F: Fn(Bank) -> u64,
