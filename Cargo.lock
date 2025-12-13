@@ -6,10 +6,31 @@ version = 4
 name = "aoc-2025-rust"
 version = "0.1.0"
 dependencies = [
+ "displaythis",
  "io_tee",
  "kust",
  "seq-macro",
  "thiserror",
+]
+
+[[package]]
+name = "displaythis"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c79ff0a3e7b4ffc7e8f3a3879c5a9ba81c68c89a8ede2e2c246eb699c48b0615"
+dependencies = [
+ "displaythis-impl",
+]
+
+[[package]]
+name = "displaythis-impl"
+version = "1.0.23"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f4b44e0b83e5704496829d7153dad68dd0bb07ebff3d4c36bfd482ba950a842"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -50,6 +71,17 @@ checksum = "1bc711410fbe7399f390ca1c3b60ad0f53f80e95c5eb935e52268a0e2cd49acc"
 
 [[package]]
 name = "syn"
+version = "1.0.109"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
+name = "syn"
 version = "2.0.111"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "390cc9a294ab71bdb1aa2e99d13be9c753cd2d7bd6560c77118597410c4d2e87"
@@ -76,7 +108,7 @@ checksum = "3ff15c8ecd7de3849db632e14d18d2571fa09dfc5ed93479bc4485c7a517c913"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn",
+ "syn 2.0.111",
 ]
 
 [[package]]
