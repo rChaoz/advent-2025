@@ -1,3 +1,4 @@
+use crate::Part::One;
 use crate::{Context, DayInfo, debug_example};
 use Turn::*;
 use displaythis::Display;
@@ -195,6 +196,9 @@ fn run(context: &mut Context) {
         .unwrap();
     context.result(identify_largest_rect_area(&points, |_, _| true));
     let n = points.len();
+    if context.part == One {
+        return;
+    }
 
     // Calculate total turn.
     let turn_count = (0..n)

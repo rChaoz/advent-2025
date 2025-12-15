@@ -6,7 +6,7 @@ use days::DAYS;
 use io_tee::TeeWriter;
 use std::fmt::Display;
 use std::fs::File;
-use std::io::{stdout, Read, Write};
+use std::io::{Read, Write, stdout};
 use std::path::Path;
 use std::time::Instant;
 
@@ -127,8 +127,12 @@ fn run_day(context: &mut Context) {
     (context.day.run)(context);
     println!("### done in {:?}\n", time.elapsed());
     match context.part {
-        One | Both if context.result_count == 0 => panic!("context.result() must be called to output your final result"),
-        Both if context.result_count == 1 => panic!("context.result() must be called twice then context.part == Both, once for each part's output"),
+        One | Both if context.result_count == 0 => {
+            panic!("context.result() must be called to output your final result")
+        }
+        Both if context.result_count == 1 => panic!(
+            "context.result() must be called twice then context.part == Both, once for each part's output"
+        ),
         _ => {}
     }
 }

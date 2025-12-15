@@ -52,7 +52,7 @@ impl Display for Point {
 impl FromStr for Point {
     type Err = PointParseError;
 
-    /// Parses a point from a string of shape "x,y,z", where x, y and z are integers (i32 bounds).
+    /// Parses a point from a string of shape "x,y,z", where x, y, and z are integers (i32 bounds).
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         fn next_coord<'a>(
             it: &mut impl Iterator<Item = &'a str>,
@@ -78,11 +78,9 @@ impl FromStr for Point {
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
 enum PointParseError {
-    /// Failed to parse the string segments with the specified index (as split by ',') into an integer
     #[error("could not parse string segment with index {0}")]
     PointParseIntError(usize, #[source] ParseIntError),
-    /// String has invalid amount of segments (less or more than 3)
-    #[error("string has invalid amount of coords: {0}, should have 3")]
+    #[error("string has an invalid number of coords: {0}, should have 3")]
     InvalidCoordsCount(usize),
 }
 
